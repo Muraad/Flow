@@ -54,7 +54,7 @@ Small code changes may have unpredictable impacts. Huge refactoring may safe suc
 The domain once is stable enough to go in production may not change very frequent.
 But the bridges between the domain and the environment may change in a more frequent way. For example different RPC (REST, SOAP, Xml-RPC, COBRA) and database/storage technologies may come and go. The domains *lifetime* [^quasar3_lifetime] is probably much longer or at least may differe from used technologies *lifetimes*.
 
-[^quasar3_lifetime]:[Quasar3.0](http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf) * A.2.1 Developement of a framework* (Page 160) 
+[^quasar3_lifetime]:[Quasar 3.0](http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf) * A.2.1 Developement of a framework* (Page 160) 
 
 
 --------
@@ -122,37 +122,66 @@ For example in Java/.Net web frameworks class methods that responde to web reque
 
 A network of generic Data flow / Stream classes is spanned during runtime. 
 Components are simply subscribing for *Abilities* they need and/or are publishing *Abilities*. 
-Concepts of message passing is used. *Abilities* (Messages) can be everything the given language is supporting (value objects, classes, functions...). So they can propagate data and/or functionality. Annotations (Java *Annotations*, C# *Attributes*) could be used as a lightweight common language for all components. Does the domain really needs an IRepository ? Maybe its enough to send a Message containing the entity together with an action that has to be done (save, delete...). If a common language (DDD, http://martinfowler.com/bliki/UbiquitousLanguage.html, Quasar Blutgruppe 0 Software, "Bestimmt von garnichts" außer minimal verfügbare standard umgebung) could be find that is spoken by all components everyone could just annotate itself with the kind of *Abilities* they offer and what *Abilities* they need to operate properly. A runtime could then *automagically* build up every needed dependencies. Further more even the data flow of a program itself (most time method calls) could be "programmed" declarative and build up during runtime when an object is instantiated. 
-Examples could be (
+Concepts of message passing is used. *Abilities* (Messages) can be everything the given language is supporting (value objects, classes, functions...). So they can propagate data and/or functionality. Annotations (Java *Annotations*, C# *Attributes*) could be used as a lightweight common language for all components. Does the domain really needs an IRepository ? Maybe its enough to send a Message containing the entity together with an action that has to be done (save, delete...). If a common language (DDD, http://martinfowler.com/bliki/UbiquitousLanguage.html, Quasar Blutgruppe 0 Software, "Bestimmt von garnichts" außer minimal verfügbare standard umgebung) could be find that is spoken by all components, types can annotate themself with the kind of *Abilities* they offer and what *Abilities* they need to operate properly. A runtime could *automagically* build up every needed dependencies. Further more the data flow of a program itself (most time method calls) could be "programmed" declarative and build up during runtime when an object is instantiated. 
+Examples could be 
 
-Property, filed, Method validation. (used in ASP.NET web framework)
-Result validation. 
-Logging of changes errors
+Property, filed (used in ASP.NET web framework, JavaEE)
+Method argument and result value validation 
+Logging of changes and/or errors
 Synchronization
 Error handling
 
-These are all static, eg. they dont realize lots of dynamic. 
+These are all static, eg. they dont realize dynamic behaviour
 If *Data flow* annotations are introduced lots of different things are possible
 in a generic way.
 
 "Every time this method is called send its result value as message..."
 "Send the result of this method to some storage..."
 "Call this method every 50 ms.."
-"I need a function that takes X and returns Y..."
+"I need a function that takes X and returns Y..." 
+*(instead of " i need implementation of interface Ixy")*
 " i offer a function that takes an X and returns an Y..."
 "Send the result of this method via HTTP (REST) to XY..." 
 "When XY happens do ..."
 "When this field is changing notify/do XY..." 
 " Every time X is received use function A to transform X to Y and send Y as message..."
 
-If message (*Ability*) passing is used all the way, its transparent for a domain to operate local or remote the runtime can take care of it. 
+If message (*Ability*) passing is used all the way, its transparent for a domain to operate local or remote. The runtime environment can take care of it.
 
-Message passing can make validation, cross cutting aspects and multithreading easier and transparent. 
-Message passing can decouple these things from concrete classes, and even from the caller (sender) itself.
-Normally in interpreted lanugage like Java and .Net aspects are (most times) applied to class methods via *Il-Weaving* or *code emtting*. The first is adding code (method interception) during the project build, the later is emitting new code/types during runtime. 
+Message passing can make validation, cross cutting aspects and multithreading easier and more transparent. 
+It can decouple these things from concrete classes, and even from the caller (sender) itself.
+Normally in interpreted lanugages like Java and .Net aspects are (most times) applied to class methods via *Il-Weaving* or *code emtting*. The first is adding code during the project build, the later is emitting new code/types during runtime. 
 Are dynamic types supported by the language, they can also be used to proxy other types to add new apsects/features. 
+
 If method calls are decoupled via *implicit invocations (message passing)* apsects can be applied more easier and in a decoupled way. 
 The aspects can simply be applied to the *Abilities (functions, class instances)* that are transported via some network (message passing, event driven,...) decoupled from the source and target instances.
+
+>The idea behind implicit invocation is that instead of invoking a
+>procedure directly, a component can announce (or broadcast) one or more
+>events. Other components in the system can register an interest in an event by
+>associating a procedure with the event. When the event is announced the
+>system itself invokes all of the procedures that have been registered for the
+>event. Thus an event announcement ``implicitly'' causes the invocation of
+>procedures in other modules. [^implicit_invocation]
+
+[^implicit_invocation]:[Event based, Implicit Invocation](http://www.cfconf.org/fusebox2003/talks/mach-iib.pdf) *David Garlan and Mary Shaw, 1994, "An Introduction to Software Architecture", Page 9 *
+
+<div></div>
+
+>Eventbased, implicit invocation architectures provide benefits of reusability, robustness  
+>and especially maintainability to software code. By combining high cohesion of software
+>components with loose coupling of these components by means of dynamic notification
+>through the use of events, applications that rely on implicit invocation can adapt flexibly
+>to the changing requirements and new uses to which so much corporate software is
+>subject. [^benjamin_edwards]
+
+[^benjamin_edwards]:[Implicit Invocation Architecture](http://www.cfconf.org/fusebox2003/talks/mach-iib.pdf) *Benjamin Edwards, An Introduction to Implicit Invocation Architectures, Page 4*
+
+<div></div>
+
+>Implicit invocation is the core technique behind the observer pattern. [^wiki_implicit_invocation]
+
+[^wiki_implicit_invocation]:[Wikipedia Implicit invocation](http://en.wikipedia.org/wiki/Implicit_invocation)
 
 ------------
 
@@ -160,7 +189,10 @@ OO-Patterns can be made easier using functions as first class objects.
 For example the *Publisher/Subscriber* pattern is normally implemented using two interfaces *IPublisher* and *ISubscriber*. At least one of them has to know the other interface.
 *IPublisher<T>* has a function *Subscribe* or *ISubscriber<T>* can have a function *SubscribeAtPublisher*. The *IPublisher* is calling each registered *ISubscriber´s* *OnUpdate* function when the publisher is receiving changes. Again most times both interfaces only declare one or two functions.
 The *IPublisher* only has to know one function. And a *Subscriber* does not has to know that he is an *ISubscriber*. There just needs to be someone how is giving a *Subscriber* function to the *IPublisher* that is fitting the *IPublisher´s* Type it is working with.
-See Reactive Extensions available for different languages and platforms.
+The *Reactive Extensions*[^reactive_extensions], available for different languages and platforms, is implementing this pattern very successfull.
+
+[^reactive_extensions]:[Rx (Reactive Extensions)](https://rx.codeplex.com/) *Reactive extensions*
+
 
 --------------------------------
 Schichtenmodell nach Quasar http://www.vsek.org/servlet/is/26886/?print=true
