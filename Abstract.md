@@ -44,7 +44,7 @@ All these requirements should be as much transparent as possible to the domain p
 
 --------
 
-It is a good design to have different logical parts of software, a domain, an infrastructure (persistence, netwokring) and so on (Layered architecture, new Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and *A-, T-, and TI- Architecture)
+It is a good design to have different logical parts of software, a domain, an infrastructure (persistence, netwokring) and so on (Layered architecture, new Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
 If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection...). The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about.
 Software erosion is starting. Maintaining (features, bugs) is becoming harder and harder. 
 Small code changes may have unpredictable impacts. Huge refactoring may safe such a software. But once a *point of no return* is reached it may become to cost-intensive. 
