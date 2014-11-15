@@ -103,8 +103,7 @@ The executable component that is fixing everything together (bootstrapping) coul
 
 ---------
 
-In generall i think first class function objects and lambdas are very good utilities to represent a common language in object oriented imperative languages to propagate functionality. Like DTO´s can to propagate structre/data to another component.
-They can act as a common bridge between different domains.
+Like DTO´s are used to propagate structure/data to another component, first class function objects and lambdas can be seen as a common languague in OO-imperative languages to propagate functionality.
 
 ----------
 
