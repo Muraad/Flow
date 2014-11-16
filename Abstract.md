@@ -1,17 +1,14 @@
 ----------
 
-Abstract
+Abstract 0.1 
 ===================
 Creating loosely coupled software using concepts of monads, functional programming, aspect oriented programming and design driven developement.
 
 Muraad Nofal - 2014
 
-
-
-
 ---------
 
-Today even programs with small domains may have to meet lots of different non domain related requirements. 
+Today even software with small domains may have to meet lots of different non domain related requirements. 
 
 The world we are living in is getting agile more and more. 
 Scrum, Canban, Lean, ...
@@ -44,8 +41,8 @@ All these requirements should be as much transparent as possible to the domain p
 
 --------
 
-It is a good design to have different logical parts of software, a domain, an infrastructure (persistence, netwokring) and so on (Layered architecture, new Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
-If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection...). The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about.
+It is a good design to have different logical parts of a software, a domain, an infrastructure (persistence, networking) and so on (Layered architecture, new Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
+If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity). The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about.
 Software erosion is starting. Maintaining (features, bugs) is becoming harder and harder. 
 Small code changes may have unpredictable impacts. Huge refactoring may safe such a software. But once a *point of no return* is reached it may become to cost-intensive. 
 
@@ -86,9 +83,9 @@ To serialize an object is a requirement that is needed in lots of projects these
 
 There may be lots of different serialization librarys/possibilites out there to fit the given needs. The api they offer will be much bigger than what one actually need. 
 The ISerialization interface will also reduce the complexity of a concrete serialization apis (information hiding).
-To use a concrete api a mediator component/library is introduces that is implementing the ISerialization domain interface using a concrete serialization api. Maybe this mediator is just a small wrapper class that is delegating method calls. Additionally it may setup the conrecte serializer to meet the domain requirements. The mediator component has to know the domain component and the concret serialization api(s) to fullfill its job.
+To use a concrete api a mediator component/library is introduces that is implementing the ISerialization domain interface using a concrete serialization api. Maybe this mediator is just a small wrapper class that is delegating method calls. Additionally it may setup the concrete serializer to meet the domain requirements. The mediator component has to know the domain component and the concrete serialization api(s) to fullfill its job.
 
-Later one needs an executable of the program. The exec. has to know every component, the domain (ISerializer), the serializer mediator component (JSONSerializer class) and the concrete serializatin api component. It can inject the JSONSerializer class to the domain where ISerializer is needed. 
+Later one needs an executable of the program. The exec. has to know every component, the domain (ISerializer), the serializer mediator component (for example JSONSerializer class) and the concrete serializatin api component. It can inject the ISerializer implementation to the domain  (end every where else) where needed.
 
 This is good and everything but in traditional object oriented imperative programing the serializer mediator component is needed to mediate between the domain language and the concrete serializer component even if the JSONSerialier class may be very small. 
 
@@ -193,6 +190,13 @@ The *Reactive Extensions*[^reactive_extensions], available for different languag
 
 [^reactive_extensions]:[Rx (Reactive Extensions)](https://rx.codeplex.com/) *Reactive extensions*
 
+-----
+
+Doing *Dependency injection* on functin level instead of on type level could become hard.
+Without additional contextual information (e.g. function names..) they may be multiple functions matching the same signature. 
+Creating new types *Name<string>* instead simply using *string* and establishing them as a commong language *Dependency injection* on functional level could become much easier and practiable. 
+In theorie together with *Ability/Message passing* this could be used to automatically build up a running program simply from all components that are available during runtime.
+Monads (*Entelechie*) will wrap createt instances and build up all connections and behaviours automatically. Maybe *targets* will be given to the program. The *Entelechies* (auto completion monads) will start their work using all avialable meta informations (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using (strong) value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities (function compositions) available form them and constantly and constantly increasing them. Maybe one *Entelechie* will find a possibility to automatically download github repos to build them and load them into the runtime :-D
 
 --------------------------------
 Schichtenmodell nach Quasar http://www.vsek.org/servlet/is/26886/?print=true
