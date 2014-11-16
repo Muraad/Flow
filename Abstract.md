@@ -2,9 +2,16 @@
 
 Abstract 0.1 
 ===================
+
+#### Upcoming bachelor thesis
+
+-------
+
 Creating loosely coupled software using concepts of monads, functional programming, aspect oriented programming and design driven developement.
 
+
 Muraad Nofal - 2014
+
 
 ---------
 
