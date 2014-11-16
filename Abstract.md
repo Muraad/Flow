@@ -192,11 +192,11 @@ The *Reactive Extensions*[^reactive_extensions], available for different languag
 
 -----
 
-Doing *Dependency injection* on functin level instead of on type level could become hard.
-Without additional contextual information (e.g. function names..) they may be multiple functions matching the same signature. 
-Creating new types *Name<string>* instead simply using *string* and establishing them as a commong language *Dependency injection* on functional level could become much easier and practiable. 
+Doing *Dependency injection* on functional level instead on type level could become hard.
+Without additional contextual information (function names..) they may be multiple functions matching the same signature. 
+Creating new types *Name<string>* instead simply using *string* and establishing them as a commong language *Dependency injection* on functional level could become much easier and practicable. 
 In theorie together with *Ability/Message passing* this could be used to automatically build up a running program simply from all components that are available during runtime.
-Mona ds (*Entelechie*  [^Entelechie] [^Entelechy] ) will wrap createt instances and build up all connections and behaviours automatically. Maybe *targets* will be given to the program. The *Entelechies* (auto completion monads) will start their work using all avialable meta informations (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using (strong) value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities (function compositions) available form them and constantly and constantly increasing them. Maybe one *Entelechie* will find a possibility to automatically download github repos to build them and load them into the runtime :-D
+Monads (*Entelechie*  [^Entelechie] [^Entelechy] ) will wrap created instances and build up all connections and behaviours automatically. Maybe *targets* will be given to the program. The *Entelechies* (auto completion monads) will start their work using all available meta informations (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using (strong) value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities (function compositions) available for them and constantly increasing them (optimization). Maybe one *Entelechie* will find a possibility to automatically download github repos to build them and load them into the runtime :-D
 
 [^Entelechie]:[Entelechie](http://de.wikipedia.org/wiki/Entelechie) (German)
 
