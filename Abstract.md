@@ -48,8 +48,9 @@ All these requirements should be as much transparent as possible to the domain p
 
 --------
 
-It is a good design to have different logical parts of a software, a domain, an infrastructure (persistence, networking) and so on (Layered architecture, new Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
-If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity). The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about.
+A good architecture is serperating different logical parts in own components. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity).
+All compontent have their own responsibility and *data superiority*. (persistence, networking) and so on (Layered architecture, newer architectures are Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
+If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about.
 Software erosion is starting. Maintaining (features, bugs) is becoming harder and harder. 
 Small code changes may have unpredictable impacts. Huge refactoring may safe such a software. But once a *point of no return* is reached it may become to cost-intensive. 
 
@@ -200,10 +201,10 @@ The *Reactive Extensions*[^reactive_extensions], available for different languag
 -----
 
 Doing *Dependency injection* on functional level instead on type level could become hard.
-Without additional contextual information (function names..) they may be multiple functions matching the same signature. 
-Creating new types *Name<string>* instead simply using *string* and establishing them as a commong language *Dependency injection* on functional level could become much easier and practicable. 
+Without additional contextual information (function names..) there may be multiple functions matching the same signature (during runtime).
+Creating new value types *Name<string>* instead simply using *string* and establishing them as a commong language *Dependency injection* on functional level could become much easier and practicable. 
 In theorie together with *Ability/Message passing* this could be used to automatically build up a running program simply from all components that are available during runtime.
-Monads (*Entelechie*  [^Entelechie] [^Entelechy] ) will wrap created instances and build up all connections and behaviours automatically. Maybe *targets* will be given to the program. The *Entelechies* (auto completion monads) will start their work using all available meta informations (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using (strong) value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities (function compositions) available for them and constantly increasing them (optimization). Maybe one *Entelechie* will find a possibility to automatically download github repos to build them and load them into the runtime :-D
+Monads (*Entelechie*  [^Entelechie] [^Entelechy] ) will wrap created instances and build up all connections and behaviours automatically. Maybe *targets* will be given to the program. The *Entelechies* (auto completion monads) will start their work using all available meta informations (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using (strong) value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities available for them and constantly increasing them (using function compositions and currying). Maybe one day an *Entelechie* will find a possibility to automatically download github repositorys, build them and load them into the runtime :-D
 
 [^Entelechie]:[Entelechie](http://de.wikipedia.org/wiki/Entelechie) (German)
 
