@@ -49,7 +49,7 @@ All these requirements should be as much transparent as possible to the domain p
 --------
 
 A good architecture is serperating different logical parts in own components. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity).
-All compontent have their own responsibility and *data superiority*. (persistence, networking) and so on (Layered architecture, newer architectures are Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
+All compontents have their own responsibility and *data superiority*. (Layered architecture, newer architectures are Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
 If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about.
 Software erosion is starting. Maintaining (features, bugs) is becoming harder and harder. 
 Small code changes may have unpredictable impacts. Huge refactoring may safe such a software. But once a *point of no return* is reached it may become to cost-intensive. 
@@ -64,7 +64,7 @@ But the bridges between the domain and the environment may change in a more freq
 
 --------
 
-At some point in a developlement all the independent components have to be brought and constructed together to make the software alive.
+At some point in a developlement all the independent components have to be constructed together to make the software alive.
 The domain entities have to be pushed to and retreived from some storage. The web api, or rpc library/part has to know about the domain to create external ports that can be consumed from the outside and so on.
 A GUI may have to know the domain to make it usable and visible. 
 Lots of these things are technical, some of them can be made generic and/or can be automated and transparent for the domain.(OR-Mapper, GUI generators for simple CRUD applications, web frameworks like ASP.NET or JavaEE).
@@ -156,7 +156,7 @@ If message (*Ability*) passing is used all the way, its transparent for a domain
 Message passing can make validation, cross cutting aspects and multithreading easier and more transparent. 
 It can decouple these things from concrete classes, and even from the caller (sender) itself.
 Normally in interpreted lanugages like Java and .Net aspects are (most times) applied to class methods via *Il-Weaving* or *code emtting*. The first is adding code during the project build, the later is emitting new code/types during runtime. 
-Are dynamic types supported by the language, they can also be used to proxy other types to add new apsects/features. 
+Are dynamic types supported by the language, they can also be used to proxy other types to add new apsects/features during runtime.
 
 If method calls are decoupled via *implicit invocations (message passing)* apsects can be applied more easier and in a decoupled way. 
 The aspects can simply be applied to the *Abilities (functions, class instances)* that are transported via some network (message passing, event driven,...) decoupled from the source and target instances.
@@ -191,20 +191,23 @@ The aspects can simply be applied to the *Abilities (functions, class instances)
 ------------
 
 OO-Patterns can be made easier using functions as first class objects.
-For example the *Publisher/Subscriber* pattern is normally implemented using two interfaces *IPublisher* and *ISubscriber*. At least one of them has to know the other interface.
-*IPublisher<T>* has a function *Subscribe* or *ISubscriber<T>* can have a function *SubscribeAtPublisher*. The *IPublisher* is calling each registered *ISubscriber´s* *OnUpdate* function when the publisher is receiving changes. Again most times both interfaces only declare one or two functions.
-The *IPublisher* only has to know one function. And a *Subscriber* does not has to know that he is an *ISubscriber*. There just needs to be someone how is giving a *Subscriber* function to the *IPublisher* that is fitting the *IPublisher´s* Type it is working with.
-The *Reactive Extensions*[^reactive_extensions], available for different languages and platforms, is implementing this pattern very successfull.
+For example the *Observer pattern* is traditionally implemented using two interfaces *IPublisher* and *ISubscriber*. At least one of them has to know the other interface (Push or Pull based). *IPublisher<T>* has a function *Subscribe(ISubscriber<T>)* or *ISubscriber<T>* can have a function *SubscribeAt(IPublisher<T>)*. The *IPublisher* is calling each registered *ISubscriber´s* *OnUpdate* function when the publisher is receiving changes. Again most times both interfaces only declare one or two functions.
+The *IPublisher* only has to know one function. And a *Subscriber* does not even has to know that it is an *ISubscriber*. There just needs to be "someone" how is giving an *OnUpdate* function to the *IPublisher* that is fitting the *IPublisher´s* Type it is working with.
+The *Reactive Extensions*[^reactive_extensions], available for different languages and platforms, is a freamwork that is using this pattern very successfull.
+See also *IObservable/IObserver* in C# .Net.
 
 [^reactive_extensions]:[Rx (Reactive Extensions)](https://rx.codeplex.com/) *Reactive extensions*
 
 -----
 
-Doing *Dependency injection* on functional level instead on type level could become hard.
-Without additional contextual information (function names..) there may be multiple functions matching the same signature (during runtime).
+Doing *Dependency injection* on functional level instead of on class level could become hard. Without additional contextual information (function names..) there may be multiple functions matching the same signature (during runtime).
 Creating new value types *Name<string>* instead simply using *string* and establishing them as a commong language *Dependency injection* on functional level could become much easier and practicable. 
-In theorie together with *Ability/Message passing* this could be used to automatically build up a running program simply from all components that are available during runtime.
-Monads (*Entelechie*  [^Entelechie] [^Entelechy] ) will wrap created instances and build up all connections and behaviours automatically. Maybe *targets* will be given to the program. The *Entelechies* (auto completion monads) will start their work using all available meta informations (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using (strong) value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities available for them and constantly increasing them (using function compositions and currying). Maybe one day an *Entelechie* will find a possibility to automatically download github repositorys, build them and load them into the runtime :-D
+In theorie together with *Ability/Message passing* and *Declarative Programming* this could be used to automatically build up a running program simply from all components and their metainformation that are available during runtime.
+Monads (*Entelechie*  [^Entelechie] [^Entelechy] ) can wrap created instances and build up all connections and behaviours automatically. *Targets* like "With data X find a way to make Y out of it" could be given to the program. The *Entelechies* (auto completion monads) will start their work using all available meta information (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities available for them and constantly increasing them using function compositions and currying. 
+
+Maybe one day an *Entelechie* will find a possibility to automatically download github repositorys, build them and load them into the runtime :-D
+
+At least a huge *Possibility graph* could be build up.
 
 [^Entelechie]:[Entelechie](http://de.wikipedia.org/wiki/Entelechie) (German)
 
