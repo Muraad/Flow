@@ -1,0 +1,224 @@
+<hr>
+
+
+
+<h1 id="abstract-01">Abstract 0.1 </h1>
+
+
+
+<h4 id="upcoming-bachelor-thesis">Upcoming bachelor thesis</h4>
+
+<hr>
+
+<p>Creating loosely coupled software using concepts of monads, functional programming, aspect oriented programming and design driven developement.</p>
+
+<p>Muraad Nofal - 2014</p>
+
+<hr>
+
+<p>Today even software with small domains may have to meet lots of different non domain related requirements. </p>
+
+<p>The world we are living in is getting agile more and more.  <br>
+Scrum, Canban, Lean, … <br>
+Variable requirements are rather the norm than an exception. <br>
+It must be easy to react on new and chaning requirements and modifications to the domain and the environment.  <br>
+Being able to add new features more cost efficient (easier, faster) can be a huge advantage over a competitor, and makes developers and customers happy :-)</p>
+
+<p>Keywords are “seperation of concerns, loosely coupled, micro services, SOA, DDD”</p>
+
+<p>Lots of different technologies may be used even for <em>small</em> projects.  <br>
+Persistence is need (Database, XML, JSON). Webservices may be used to add new features (facebook, sharing, drobox) or to gather informations that would be otherwise hard to get (weather, maps). Maybe the project itself is a web app and/or needs to provide some kind of api that can be consumed (externaly) via a conanical format (REST, SOAP, RPC…).  <br>
+A software must be responsive (multithreading). It may have different clients accessing at the same time. Synchronization or special architectures must  be taken into account. </p>
+
+<hr>
+
+<p>To have a responsive user interface or to offer the possibility to update user data to one of the widely used cloud storages could make the difference users are preffering one software over the other. Even the software is only a small smartphone “notes” app.</p>
+
+<hr>
+
+<p>Additionally there may be different cross cutting requirements that are needed throughout the whole software. For example diagnostic releated things like logging and profiling. Another commong requirement is input validation or business rule validation.</p>
+
+<hr>
+
+<p>Some time these non domain/business related requirements may be much more comprehensive than the actual business logic that is needed to solve a given problem.</p>
+
+<hr>
+
+<p>All these requirements should be as much transparent as possible to the domain part of a project. </p>
+
+<hr>
+
+<p>A good architecture is serperating different logical parts in own components. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity). <br>
+All compontent have their own responsibility and <em>data superiority</em>. (persistence, networking) and so on (Layered architecture, newer architectures are Hexagonal (DDD), Onion, see also <a href="http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf" title="Quasar 3.0">Quasar 3.0</a>. <em>Blutgruppen</em> and A-, T-, and TI- Architecture) <br>
+If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about. <br>
+Software erosion is starting. Maintaining (features, bugs) is becoming harder and harder.  <br>
+Small code changes may have unpredictable impacts. Huge refactoring may safe such a software. But once a <em>point of no return</em> is reached it may become to cost-intensive. </p>
+
+<hr>
+
+<p>The domain once is stable enough to go in production may not change very frequent. <br>
+But the bridges between the domain and the environment may change in a more frequent way. For example different RPC (REST, SOAP, Xml-RPC, COBRA) and database/storage technologies may come and go. The domains <em>lifetime</em> <a href="#fn:quasar3_lifetime" id="fnref:quasar3_lifetime" title="See footnote" class="footnote">1</a> is probably much longer or at least may differe from used technologies <em>lifetimes</em>.</p>
+
+<hr>
+
+<p>At some point in a developlement all the independent components have to be brought and constructed together to make the software alive. <br>
+The domain entities have to be pushed to and retreived from some storage. The web api, or rpc library/part has to know about the domain to create external ports that can be consumed from the outside and so on. <br>
+A GUI may have to know the domain to make it usable and visible.  <br>
+Lots of these things are technical, some of them can be made generic and/or can be automated and transparent for the domain.(OR-Mapper, GUI generators for simple CRUD applications, web frameworks like ASP.NET or JavaEE).</p>
+
+<hr>
+
+<p>Mobile developement becomes more and more important (Mobile first). <br>
+Say a company has an existing java program that runs on linux, and want to have an android app now.  <br>
+Because you can use java on both platforms one can get good benefits out of code reuse. But some parts may be different, and some apis that seems normal and standard for a desktop environment are different and/or not availabe on other platforms. At least the ui part will be different.</p>
+
+<p>To hava a good architecture/design and an isolated domain can increase the amount of code that can be reused on different platforms.  <br>
+Ideally the complete domain/business logic may be reused on all required platforms.  <br>
+In .NET environments for example there is the concept of a “portable class library”, that means the library uses only parts of the runtime environment that are available on all possible runtimes. More exactly what environments should be supported can be further specified to meet the given requirements.  <br>
+Minimal available runtime environment (standard libary) is a common language between components (of the same prog. language). Usage without mediator components possible. <br>
+(Quasar Blutgruppe 0 Software).</p>
+
+<hr>
+
+<p>To isolate the domain model/part of a software form the infrastructure in OO-lanugages most time new interfaces are introduces by the domain. For example an IRepository (repository pattern) to make the storage and retreival of domain entities transparent. </p>
+
+<p>During runtime a concrete IRepository implementation can be injected (Inversin of control, dependecy injection) when an object is created. <br>
+Another example i have seen quite often is an ISerialization interface. Most times it will only declare two methods to serialize and deserialize an object.  <br>
+To serialize an object is a requirement that is needed in lots of projects these days.</p>
+
+<p>There may be lots of different serialization librarys/possibilites out there to fit the given needs. The api they offer will be much bigger than what one actually need.  <br>
+The ISerialization interface will also reduce the complexity of a concrete serialization apis (information hiding). <br>
+To use a concrete api a mediator component/library is introduces that is implementing the ISerialization domain interface using a concrete serialization api. Maybe this mediator is just a small wrapper class that is delegating method calls. Additionally it may setup the concrete serializer to meet the domain requirements. The mediator component has to know the domain component and the concrete serialization api(s) to fullfill its job.</p>
+
+<p>Later one needs an executable of the program. The exec. has to know every component, the domain (ISerializer), the serializer mediator component (for example JSONSerializer class) and the concrete serializatin api component. It can inject the ISerializer implementation to the domain  (end every where else) where needed.</p>
+
+<p>This is good and everything but in traditional object oriented imperative programing the serializer mediator component is needed to mediate between the domain language and the concrete serializer component even if the JSONSerialier class may be very small. </p>
+
+<p>The executable component that knows all other components and fixes everything together may be relativelly small too, if inversion of control and dependency injection frameworks and or pluginable architectures are used. </p>
+
+<p>Functional programming concepts can reduce the need for a mediator component between the domain and infrastructure components.  Most time the <em>Serialize</em> function will simply take an instance (maybe generic or base type), maybe its returning a boolean to indicate success or failure. The <em>Deserialize</em> function may simply take a Stream object an will return a concrete instance. <br>
+The point is the functions itself may take only standard runtime objects/types as arguments. These can be understood from every component without the need for a mediator component that is translating.</p>
+
+<p>In programming lanugates where functions (lambdas) are first class objects like in .NET they exist on all possible platforms/environments. If the runtime is not injecting an ISerialization but only a <em>Serialize</em> function there is no need for a mediator component.</p>
+
+<p>The executable component that is fixing everything together (bootstrapping) could take the mediators job using lambdas to create needed <em>Serialize</em> and <em>Deserialize</em>  functions and inject them where needed. </p>
+
+<hr>
+
+<p>Like DTO´s are used to propagate structure/data to another component, first class function objects and lambdas can be seen as a common languague in OO-imperative languages to propagate functionality.</p>
+
+<hr>
+
+<p>Concepts like Aspect-, Subject- and Role based programming can further help to seperate concerns and to help to concentrate on the domain.</p>
+
+<p>All three can be explained using monads, they add functionality /structure to existing types and their instances without chaning them.  <br>
+An apsect like logging can be applied to all methods of class without chaning the behaviour of the class itself.  <br>
+Other parts of the program may react different on an entity depending on what subject it came from or what role the the entity is currently representing. For example a Customer can be a <em>GoldCustomer</em> or a <em>NormalCustomer</em>. Maybe the role itself is adding new functionality to the underlying entity itself. This can be modelled using inheritance/subtyping, but i think this could be modelled in more generic ways using concepts of monads. </p>
+
+<hr>
+
+<p>Concepts of declarative programming and/or attribute based programming can be used to describe ———- in an intuitive an clean way. Monads that wrap entitys can reflect themself during runtime and read out different kind of attributes. These attributes can contain validation and cross cutting stuff. (PostSharp) Based on given attributes behaviour/aspects can be injected with code generation or during runtime. <br>
+For example in Java/.Net web frameworks class methods that responde to web requets are simply annotated to indicate what HTTPMethod and URL they are responding too. So the domain controllers can be programmed without thinking about HOW.</p>
+
+<hr>
+
+<p>A network of generic Data flow / Stream classes is spanned during runtime.  <br>
+Components are simply subscribing for <em>Abilities</em> they need and/or are publishing <em>Abilities</em>.  <br>
+Concepts of message passing is used. <em>Abilities</em> (Messages) can be everything the given language is supporting (value objects, classes, functions…). So they can propagate data and/or functionality. Annotations (Java <em>Annotations</em>, C# <em>Attributes</em>) could be used as a lightweight common language for all components. Does the domain really needs an IRepository ? Maybe its enough to send a Message containing the entity together with an action that has to be done (save, delete…). If a common language (DDD, <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">http://martinfowler.com/bliki/UbiquitousLanguage.html</a>, Quasar Blutgruppe 0 Software, “Bestimmt von garnichts” außer minimal verfügbare standard umgebung) could be find that is spoken by all components, types can annotate themself with the kind of <em>Abilities</em> they offer and what <em>Abilities</em> they need to operate properly. A runtime could <em>automagically</em> build up every needed dependencies. Further more the data flow of a program itself (most time method calls) could be “programmed” declarative and build up during runtime when an object is instantiated.  <br>
+Examples could be </p>
+
+<p>Property, filed (used in ASP.NET web framework, JavaEE) <br>
+Method argument and result value validation  <br>
+Logging of changes and/or errors <br>
+Synchronization <br>
+Error handling</p>
+
+<p>These are all static, eg. they dont realize dynamic behaviour <br>
+If <em>Data flow</em> annotations are introduced lots of different things are possible <br>
+in a generic way.</p>
+
+<p>“Every time this method is called send its result value as message…” <br>
+“Send the result of this method to some storage…” <br>
+“Call this method every 50 ms..” <br>
+“I need a function that takes X and returns Y…”  <br>
+<em>(instead of ” i need implementation of interface Ixy”)</em> <br>
+” i offer a function that takes an X and returns an Y…” <br>
+“Send the result of this method via HTTP (REST) to XY…”  <br>
+“When XY happens do …” <br>
+“When this field is changing notify/do XY…”  <br>
+” Every time X is received use function A to transform X to Y and send Y as message…”</p>
+
+<p>If message (<em>Ability</em>) passing is used all the way, its transparent for a domain to operate local or remote. The runtime environment can take care of it.</p>
+
+<p>Message passing can make validation, cross cutting aspects and multithreading easier and more transparent.  <br>
+It can decouple these things from concrete classes, and even from the caller (sender) itself. <br>
+Normally in interpreted lanugages like Java and .Net aspects are (most times) applied to class methods via <em>Il-Weaving</em> or <em>code emtting</em>. The first is adding code during the project build, the later is emitting new code/types during runtime.  <br>
+Are dynamic types supported by the language, they can also be used to proxy other types to add new apsects/features. </p>
+
+<p>If method calls are decoupled via <em>implicit invocations (message passing)</em> apsects can be applied more easier and in a decoupled way.  <br>
+The aspects can simply be applied to the <em>Abilities (functions, class instances)</em> that are transported via some network (message passing, event driven,…) decoupled from the source and target instances.</p>
+
+<blockquote>
+  <p>The idea behind implicit invocation is that instead of invoking a <br>
+  procedure directly, a component can announce (or broadcast) one or more <br>
+  events. Other components in the system can register an interest in an event by <br>
+  associating a procedure with the event. When the event is announced the <br>
+  system itself invokes all of the procedures that have been registered for the <br>
+  event. Thus an event announcement “implicitly” causes the invocation of <br>
+  procedures in other modules. <a href="#fn:implicit_invocation" id="fnref:implicit_invocation" title="See footnote" class="footnote">2</a>
+</p></blockquote>
+
+<div></div>
+
+<blockquote>
+  <p>Eventbased, implicit invocation architectures provide benefits of reusability, robustness <br>
+  and especially maintainability to software code. By combining high cohesion of software <br>
+  components with loose coupling of these components by means of dynamic notification <br>
+  through the use of events, applications that rely on implicit invocation can adapt flexibly <br>
+  to the changing requirements and new uses to which so much corporate software is <br>
+  subject. <a href="#fn:benjamin_edwards" id="fnref:benjamin_edwards" title="See footnote" class="footnote">3</a>
+</p></blockquote>
+
+<div></div>
+
+<blockquote>
+  <p>Implicit invocation is the core technique behind the observer pattern. <a href="#fn:wiki_implicit_invocation" id="fnref:wiki_implicit_invocation" title="See footnote" class="footnote">4</a>
+</p></blockquote>
+
+<hr>
+
+<p>OO-Patterns can be made easier using functions as first class objects. <br>
+For example the <em>Publisher/Subscriber</em> pattern is normally implemented using two interfaces <em>IPublisher</em> and <em>ISubscriber</em>. At least one of them has to know the other interface. <br>
+<em>IPublisher</em> has a function <em>Subscribe</em> or <em>ISubscriber</em> can have a function <em>SubscribeAtPublisher</em>. The <em>IPublisher</em> is calling each registered <em>ISubscriber´s</em> <em>OnUpdate</em> function when the publisher is receiving changes. Again most times both interfaces only declare one or two functions. <br>
+The <em>IPublisher</em> only has to know one function. And a <em>Subscriber</em> does not has to know that he is an <em>ISubscriber</em>. There just needs to be someone how is giving a <em>Subscriber</em> function to the <em>IPublisher</em> that is fitting the <em>IPublisher´s</em> Type it is working with. <br>
+The <em>Reactive Extensions</em><a href="#fn:reactive_extensions" id="fnref:reactive_extensions" title="See footnote" class="footnote">5</a>, available for different languages and platforms, is implementing this pattern very successfull.</p>
+
+<hr>
+
+<p>Doing <em>Dependency injection</em> on functional level instead on type level could become hard. <br>
+Without additional contextual information (function names..) there may be multiple functions matching the same signature (during runtime). <br>
+Creating new value types <em>Name</em> instead simply using <em>string</em> and establishing them as a commong language <em>Dependency injection</em> on functional level could become much easier and practicable.  <br>
+In theorie together with <em>Ability/Message passing</em> this could be used to automatically build up a running program simply from all components that are available during runtime. <br>
+Monads (<em>Entelechie</em>  <a href="#fn:entelechie" id="fnref:entelechie" title="See footnote" class="footnote">6</a> <a href="#fn:entelechy" id="fnref:entelechy" title="See footnote" class="footnote">7</a> ) will wrap created instances and build up all connections and behaviours automatically. Maybe <em>targets</em> will be given to the program. The <em>Entelechies</em> (auto completion monads) will start their work using all available meta informations (Reflection, Annotations, “I want.. I have..”). They will find their way from function to function until they reach their goals. Using (strong) value types like <em>Name</em> could greatly improve this process. Further they could automatically learn (all) possibillities available for them and constantly increasing them (using function compositions and currying). Maybe one day an <em>Entelechie</em> will find a possibility to automatically download github repositorys, build them and load them into the runtime :-D</p>
+
+<hr>
+
+<p>Schichtenmodell nach Quasar <a href="http://www.vsek.org/servlet/is/26886/?print=true">http://www.vsek.org/servlet/is/26886/?print=true</a> <br>
+<a href="http://st.inf.tu-dresden.de/Lehre/WS06-07/st1/Vorlesungen/21b-quasar.pdf">http://st.inf.tu-dresden.de/Lehre/WS06-07/st1/Vorlesungen/21b-quasar.pdf</a> <br>
+<a href="http://www.qaware.de/download.php?artid=%7B972d1c79-ea13-815e-0e57-ece33fbead46%7D">http://www.qaware.de/download.php?artid=%7B972d1c79-ea13-815e-0e57-ece33fbead46%7D</a>  (erklärt Blutgruppen kurz und gut)</p>
+
+<p>Layered vs Onion</p>
+
+<p><a href="http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html">http://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html</a> <br>
+<a href="http://www.methodsandtools.com/archive/onionsoftwarearchitecture.php">http://www.methodsandtools.com/archive/onionsoftwarearchitecture.php</a> <br>
+<a href="https://github.com/danielmarbach/Onion.Factory">https://github.com/danielmarbach/Onion.Factory</a> <br>
+<a href="http://de.slideshare.net/matthidinger/onion-architecture">http://de.slideshare.net/matthidinger/onion-architecture</a> <br>
+<a href="http://alistair.cockburn.us/Hexagonal+architecture">http://alistair.cockburn.us/Hexagonal+architecture</a> (Ports and adapters)</p>
+
+<p>Domain driven developement  <br>
+<a href="http://www.methodsandtools.com/archive/archive.php?id=97">http://www.methodsandtools.com/archive/archive.php?id=97</a> <br>
+<a href="http://de.wikipedia.org/wiki/Domain-Driven_Design">http://de.wikipedia.org/wiki/Domain-Driven_Design</a> <br>
+<a href="http://de.slideshare.net/Tindr/domain-driven-design-with-onion?related=1">http://de.slideshare.net/Tindr/domain-driven-design-with-onion?related=1</a> <br>
+<a href="http://de.slideshare.net/XebiaFrance/ddd-bdx-io?next_slideshow=1">http://de.slideshare.net/XebiaFrance/ddd-bdx-io?next_slideshow=1</a></p>
+
+<div class="footnotes"><hr><ol><li id="fn:quasar3_lifetime"><a href="http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf">Quasar 3.0</a> * A.2.1 Developement of a framework* (Page 160)  <a href="#fnref:quasar3_lifetime" title="Return to article" class="reversefootnote">↩</a></li><li id="fn:implicit_invocation"><a href="http://www.cfconf.org/fusebox2003/talks/mach-iib.pdf">Event based, Implicit Invocation</a> <em>David Garlan and Mary Shaw, 1994, “An Introduction to Software Architecture”, Page 9 </em> <a href="#fnref:implicit_invocation" title="Return to article" class="reversefootnote">↩</a></li><li id="fn:benjamin_edwards"><a href="http://www.cfconf.org/fusebox2003/talks/mach-iib.pdf">Implicit Invocation Architecture</a> <em>Benjamin Edwards, An Introduction to Implicit Invocation Architectures, Page 4</em> <a href="#fnref:benjamin_edwards" title="Return to article" class="reversefootnote">↩</a></li><li id="fn:wiki_implicit_invocation"><a href="http://en.wikipedia.org/wiki/Implicit_invocation">Wikipedia Implicit invocation</a> <a href="#fnref:wiki_implicit_invocation" title="Return to article" class="reversefootnote">↩</a></li><li id="fn:reactive_extensions"><a href="https://rx.codeplex.com/">Rx (Reactive Extensions)</a> <em>Reactive extensions</em> <a href="#fnref:reactive_extensions" title="Return to article" class="reversefootnote">↩</a></li><li id="fn:entelechie"><a href="http://de.wikipedia.org/wiki/Entelechie">Entelechie</a> (German) <a href="#fnref:entelechie" title="Return to article" class="reversefootnote">↩</a></li><li id="fn:entelechy"><a href="http://en.wikipedia.org/wiki/Potentiality_and_actuality">Entelechy - Potentiality &amp; Actuality</a> (English) <a href="#fnref:entelechy" title="Return to article" class="reversefootnote">↩</a></li></ol></div>
