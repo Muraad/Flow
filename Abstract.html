@@ -49,7 +49,7 @@ A software must be responsive (multithreading). It may have different clients ac
 <hr>
 
 <p>A good architecture is serperating different logical parts in own components. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity). <br>
-All compontent have their own responsibility and <em>data superiority</em>. (persistence, networking) and so on (Layered architecture, newer architectures are Hexagonal (DDD), Onion, see also <a href="http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf" title="Quasar 3.0">Quasar 3.0</a>. <em>Blutgruppen</em> and A-, T-, and TI- Architecture) <br>
+All compontents have their own responsibility and <em>data superiority</em>. (Layered architecture, newer architectures are Hexagonal (DDD), Onion, see also <a href="http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf" title="Quasar 3.0">Quasar 3.0</a>. <em>Blutgruppen</em> and A-, T-, and TI- Architecture) <br>
 If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about. <br>
 Software erosion is starting. Maintaining (features, bugs) is becoming harder and harder.  <br>
 Small code changes may have unpredictable impacts. Huge refactoring may safe such a software. But once a <em>point of no return</em> is reached it may become to cost-intensive. </p>
@@ -61,7 +61,7 @@ But the bridges between the domain and the environment may change in a more freq
 
 <hr>
 
-<p>At some point in a developlement all the independent components have to be brought and constructed together to make the software alive. <br>
+<p>At some point in a developlement all the independent components have to be constructed together to make the software alive. <br>
 The domain entities have to be pushed to and retreived from some storage. The web api, or rpc library/part has to know about the domain to create external ports that can be consumed from the outside and so on. <br>
 A GUI may have to know the domain to make it usable and visible.  <br>
 Lots of these things are technical, some of them can be made generic and/or can be automated and transparent for the domain.(OR-Mapper, GUI generators for simple CRUD applications, web frameworks like ASP.NET or JavaEE).</p>
@@ -153,7 +153,7 @@ in a generic way.</p>
 <p>Message passing can make validation, cross cutting aspects and multithreading easier and more transparent.  <br>
 It can decouple these things from concrete classes, and even from the caller (sender) itself. <br>
 Normally in interpreted lanugages like Java and .Net aspects are (most times) applied to class methods via <em>Il-Weaving</em> or <em>code emtting</em>. The first is adding code during the project build, the later is emitting new code/types during runtime.  <br>
-Are dynamic types supported by the language, they can also be used to proxy other types to add new apsects/features. </p>
+Are dynamic types supported by the language, they can also be used to proxy other types to add new apsects/features during runtime.</p>
 
 <p>If method calls are decoupled via <em>implicit invocations (message passing)</em> apsects can be applied more easier and in a decoupled way.  <br>
 The aspects can simply be applied to the <em>Abilities (functions, class instances)</em> that are transported via some network (message passing, event driven,…) decoupled from the source and target instances.</p>
@@ -188,18 +188,21 @@ The aspects can simply be applied to the <em>Abilities (functions, class instanc
 <hr>
 
 <p>OO-Patterns can be made easier using functions as first class objects. <br>
-For example the <em>Publisher/Subscriber</em> pattern is normally implemented using two interfaces <em>IPublisher</em> and <em>ISubscriber</em>. At least one of them has to know the other interface. <br>
-<em>IPublisher</em> has a function <em>Subscribe</em> or <em>ISubscriber</em> can have a function <em>SubscribeAtPublisher</em>. The <em>IPublisher</em> is calling each registered <em>ISubscriber´s</em> <em>OnUpdate</em> function when the publisher is receiving changes. Again most times both interfaces only declare one or two functions. <br>
-The <em>IPublisher</em> only has to know one function. And a <em>Subscriber</em> does not has to know that he is an <em>ISubscriber</em>. There just needs to be someone how is giving a <em>Subscriber</em> function to the <em>IPublisher</em> that is fitting the <em>IPublisher´s</em> Type it is working with. <br>
-The <em>Reactive Extensions</em><a href="#fn:reactive_extensions" id="fnref:reactive_extensions" title="See footnote" class="footnote">5</a>, available for different languages and platforms, is implementing this pattern very successfull.</p>
+For example the <em>Observer pattern</em> is traditionally implemented using two interfaces <em>IPublisher</em> and <em>ISubscriber</em>. At least one of them has to know the other interface (Push or Pull based). <em>IPublisher</em> has a function <em>Subscribe(ISubscriber)</em> or <em>ISubscriber</em> can have a function <em>SubscribeAt(IPublisher)</em>. The <em>IPublisher</em> is calling each registered <em>ISubscriber´s</em> <em>OnUpdate</em> function when the publisher is receiving changes. Again most times both interfaces only declare one or two functions. <br>
+The <em>IPublisher</em> only has to know one function. And a <em>Subscriber</em> does not even has to know that it is an <em>ISubscriber</em>. There just needs to be “someone” how is giving an <em>OnUpdate</em> function to the <em>IPublisher</em> that is fitting the <em>IPublisher´s</em> Type it is working with. <br>
+The <em>Reactive Extensions</em><a href="#fn:reactive_extensions" id="fnref:reactive_extensions" title="See footnote" class="footnote">5</a>, available for different languages and platforms, is a freamwork that is using this pattern very successfull. <br>
+See also <em>IObservable/IObserver</em> in C# .Net.</p>
 
 <hr>
 
-<p>Doing <em>Dependency injection</em> on functional level instead on type level could become hard. <br>
-Without additional contextual information (function names..) there may be multiple functions matching the same signature (during runtime). <br>
+<p>Doing <em>Dependency injection</em> on functional level instead of on class level could become hard. Without additional contextual information (function names..) there may be multiple functions matching the same signature (during runtime). <br>
 Creating new value types <em>Name</em> instead simply using <em>string</em> and establishing them as a commong language <em>Dependency injection</em> on functional level could become much easier and practicable.  <br>
-In theorie together with <em>Ability/Message passing</em> this could be used to automatically build up a running program simply from all components that are available during runtime. <br>
-Monads (<em>Entelechie</em>  <a href="#fn:entelechie" id="fnref:entelechie" title="See footnote" class="footnote">6</a> <a href="#fn:entelechy" id="fnref:entelechy" title="See footnote" class="footnote">7</a> ) will wrap created instances and build up all connections and behaviours automatically. Maybe <em>targets</em> will be given to the program. The <em>Entelechies</em> (auto completion monads) will start their work using all available meta informations (Reflection, Annotations, “I want.. I have..”). They will find their way from function to function until they reach their goals. Using (strong) value types like <em>Name</em> could greatly improve this process. Further they could automatically learn (all) possibillities available for them and constantly increasing them (using function compositions and currying). Maybe one day an <em>Entelechie</em> will find a possibility to automatically download github repositorys, build them and load them into the runtime :-D</p>
+In theorie together with <em>Ability/Message passing</em> and <em>Declarative Programming</em> this could be used to automatically build up a running program simply from all components and their metainformation that are available during runtime. <br>
+Monads (<em>Entelechie</em>  <a href="#fn:entelechie" id="fnref:entelechie" title="See footnote" class="footnote">6</a> <a href="#fn:entelechy" id="fnref:entelechy" title="See footnote" class="footnote">7</a> ) can wrap created instances and build up all connections and behaviours automatically. <em>Targets</em> like “With data X find a way to make Y out of it” could be given to the program. The <em>Entelechies</em> (auto completion monads) will start their work using all available meta information (Reflection, Annotations, “I want.. I have..”). They will find their way from function to function until they reach their goals. Using value types like <em>Name</em> could greatly improve this process. Further they could automatically learn (all) possibillities available for them and constantly increasing them using function compositions and currying. </p>
+
+<p>Maybe one day an <em>Entelechie</em> will find a possibility to automatically download github repositorys, build them and load them into the runtime :-D</p>
+
+<p>At least a huge <em>Possibility graph</em> could be build up.</p>
 
 <hr>
 
