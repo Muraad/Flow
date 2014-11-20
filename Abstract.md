@@ -3,7 +3,7 @@
 Abstract 0.1 
 ===================
 
-#### Upcoming bachelor thesis
+### Upcoming bachelor thesis
 
 -------
 
@@ -14,6 +14,12 @@ Muraad Nofal - 2014
 
 
 ---------
+
+[TOC]
+
+<div class="page-break-after"></div>
+
+###Intro - Agility and variable requirements
 
 Today even software with small domains may have to meet lots of different non domain related requirements. 
 
@@ -26,8 +32,9 @@ Being able to add new features more cost efficient (easier, faster) can be a hug
 
 Keywords are "seperation of concerns, loosely coupled, micro services, SOA, DDD"
 
+###Multiple technical requirements
 Lots of different technologies may be used even for *small* projects. 
-Persistence is need (Database, XML, JSON). Webservices may be used to add new features (facebook, sharing, drobox) or to gather informations that would be otherwise hard to get (weather, maps). Maybe the project itself is a web app and/or needs to provide some kind of api that can be consumed (externaly) via a conanical format (REST, SOAP, RPC...). 
+Persistence is need (Database, XML, JSON). Webservices may be used to add new features (facebook, sharing, drobox) or to gather informations that would be otherwise hard to get (weather, maps, translation). Maybe the project itself is a web app and/or needs to provide some kind of api that can be consumed (externaly) via a conanical format (REST, SOAP, RPC...). 
 A software must be responsive (multithreading). It may have different clients accessing at the same time. Synchronization or special architectures must  be taken into account. 
 
 ---------
@@ -36,26 +43,31 @@ To have a responsive user interface or to offer the possibility to update user d
 
 --------
 
-Additionally there may be different cross cutting requirements that are needed throughout the whole software. For example diagnostic releated things like logging and profiling. Another commong requirement is input validation or business rule validation.
+###Crosscutting concerns
+Additionally there may be different cross cutting requirements that are needed throughout the whole software. For example diagnostic releated things like logging and profiling. Another commong requirement is input validation or business rule validation and authentication (security).
+
 
 ---------
 
+### Domain vs. non domain related requirements
 Some time these non domain/business related requirements may be much more comprehensive than the actual business logic that is needed to solve a given problem.
-
----------
 
 All these requirements should be as much transparent as possible to the domain part of a project. 
 
 --------
+####Seperation of concerns - From *Layers* to *Hexagonal* and *Onions*
 
-A good architecture is serperating different logical parts in own components. (Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity).
-All compontents have their own responsibility and *data superiority*. (Layered architecture, newer architectures are Hexagonal (DDD), Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
+A good desgin is serperating different logical parts in own components. 
+(Seperation of concerns, single responsibility, repository pattern, factorys, inversion of control, dependency injection, high cohesion - low coupling - high modularity).
+All compontents have their own responsibility and *data superiority*. (Layered architecture, newer architectures are Hexagonal (DDD), Ports and adapters, Onion, see also [Quasar 3.0][1]. *Blutgruppen* and A-, T-, and TI- Architecture)
 If things are not seperated from the beginning on its the direct way to tightly coupled software that is hard to maintain and even harder to extend. The domain that the software is trying to work on is getting cluttered more and more by technical stuff the domain part should not take care about.
 Software erosion is starting. Maintaining (features, bugs) is becoming harder and harder. 
 Small code changes may have unpredictable impacts. Huge refactoring may safe such a software. But once a *point of no return* is reached it may become to cost-intensive. 
 
-----------
+[1]:http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf "Quasar 3.0"
 
+----------
+#### Domain lifetime vs technology lifetime
 The domain once is stable enough to go in production may not change very frequent.
 But the bridges between the domain and the environment may change in a more frequent way. For example different RPC (REST, SOAP, Xml-RPC, COBRA) and database/storage technologies may come and go. The domains *lifetime* [^quasar3_lifetime] is probably much longer or at least may differe from used technologies *lifetimes*.
 
@@ -63,14 +75,15 @@ But the bridges between the domain and the environment may change in a more freq
 
 
 --------
+### Making a software alive
 
-At some point in a developlement all the independent components have to be constructed together to make the software alive.
+At some point all the independent components have to be constructed together to make a software alive.
 The domain entities have to be pushed to and retreived from some storage. The web api, or rpc library/part has to know about the domain to create external ports that can be consumed from the outside and so on.
 A GUI may have to know the domain to make it usable and visible. 
 Lots of these things are technical, some of them can be made generic and/or can be automated and transparent for the domain.(OR-Mapper, GUI generators for simple CRUD applications, web frameworks like ASP.NET or JavaEE).
 
 ----------
-
+####Different platforms and environments - Code reuse
 Mobile developement becomes more and more important (Mobile first).
 Say a company has an existing java program that runs on linux, and want to have an android app now. 
 Because you can use java on both platforms one can get good benefits out of code reuse. But some parts may be different, and some apis that seems normal and standard for a desktop environment are different and/or not availabe on other platforms. At least the ui part will be different.
@@ -83,11 +96,14 @@ Minimal available runtime environment (standard libary) is a common language bet
 
 ----------
 
-To isolate the domain model/part of a software form the infrastructure in OO-lanugages most time new interfaces are introduces by the domain. For example an IRepository (repository pattern) to make the storage and retreival of domain entities transparent. 
+###*Inversion of control* and *Dependency injection*
+To isolate the domain model/part of a software form the infrastructure in OO-lanugages most time new interfaces are introduces by the domain. 
+Everything the domain is not able to implement using the minimum avialable
+standard runtime (librarys) is packed into interfaces like the IRepository. 
+For example an IRepository (repository pattern) to make the storage and retreival of domain entities transparent. 
 
-During runtime a concrete IRepository implementation can be injected (Inversin of control, dependecy injection) when an object is created.
-Another example i have seen quite often is an ISerialization interface. Most times it will only declare two methods to serialize and deserialize an object. 
-To serialize an object is a requirement that is needed in lots of projects these days.
+During runtime a concrete interface implementation can be injected (Inversin of control, dependecy injection) when an object is created.
+Another example often needed is an ISerialization interface. To serialize an object is a requirement that is needed in lots of projects these days. Most times it will only declare two methods to serialize and deserialize an object. 
 
 There may be lots of different serialization librarys/possibilites out there to fit the given needs. The api they offer will be much bigger than what one actually need. 
 The ISerialization interface will also reduce the complexity of a concrete serialization apis (information hiding).
@@ -99,18 +115,27 @@ This is good and everything but in traditional object oriented imperative progra
 
 The executable component that knows all other components and fixes everything together may be relativelly small too, if inversion of control and dependency injection frameworks and or pluginable architectures are used. 
 
-Functional programming concepts can reduce the need for a mediator component between the domain and infrastructure components.  Most time the *Serialize* function will simply take an instance (maybe generic or base type), maybe its returning a boolean to indicate success or failure. The *Deserialize* function may simply take a Stream object an will return a concrete instance.
-The point is the functions itself may take only standard runtime objects/types as arguments. These can be understood from every component without the need for a mediator component that is translating.
+#### Injecting functions instead of class instances
 
-In programming lanugates where functions (lambdas) are first class objects like in .NET they exist on all possible platforms/environments. If the runtime is not injecting an ISerialization but only a *Serialize* function there is no need for a mediator component.
+Functional programming concepts can reduce the need for a mediator component between the domain and infrastructure components.  Maybe the *Serialize* function will simply take an instance (maybe generic or base type),  and is returning a boolean to indicate success or failure. The *Deserialize* function may take a Stream object as argument an will return a concrete instance.
+
+>The interface functions itself may take only standard runtime objects/types as 
+>arguments. These can be understood from every component without the need for a >
+>mediator component that is translating.
+
+In programming lanugates where functions (lambdas) are first class objects like in .NET or now in Java 8, they can be used on all possible platforms/environments. If the runtime is not injecting an ISerialization but only a *Serialize* function there is no need for a mediator component.
 
 The executable component that is fixing everything together (bootstrapping) could take the mediators job using lambdas to create needed *Serialize* and *Deserialize*  functions and inject them where needed. 
 
 ---------
 
-Like DTO´s are used to propagate structure/data to another component, first class function objects and lambdas can be seen as a common languague in OO-imperative languages to propagate functionality.
+>Like DTO´s are used to propagate structure and data to another component, first class 
+>function objects and lambdas can be seen as a common languague in OO-imperative 
+>languages to propagate functionality.
 
 ----------
+
+###Aspect-, Subject- Role based and Monads
 
 Concepts like Aspect-, Subject- and Role based programming can further help to seperate concerns and to help to concentrate on the domain.
 
@@ -120,14 +145,21 @@ Other parts of the program may react different on an entity depending on what su
 
 ---------
 
-Concepts of declarative programming and/or attribute based programming can be used to describe ---------- in an intuitive an clean way. Monads that wrap entitys can reflect themself during runtime and read out different kind of attributes. These attributes can contain validation and cross cutting stuff. (PostSharp) Based on given attributes behaviour/aspects can be injected with code generation or during runtime.
+###Declarative and attribute based programming
+
+Concepts of declarative programming and/or attribute based programming can be used to describe ---------- in an intuitive an clean way. Monads that wrap entitys can reflect themself during runtime and read out different kind of attributes. These attributes can contain validation and cross cutting requirements ([PostSharp][2] for example). Based on given attributes behaviour/aspects can be injected with code generation or during runtime.
 For example in Java/.Net web frameworks class methods that responde to web requets are simply annotated to indicate what HTTPMethod and URL they are responding too. So the domain controllers can be programmed without thinking about HOW.
+
+[2]:(http://www.postsharp.net/) "PostSharp"
+
 
 -----------
 
+###Ability (message) passing
+
 A network of generic Data flow / Stream classes is spanned during runtime. 
-Components are simply subscribing for *Abilities* they need and/or are publishing *Abilities*. 
-Concepts of message passing is used. *Abilities* (Messages) can be everything the given language is supporting (value objects, classes, functions...). So they can propagate data and/or functionality. Annotations (Java *Annotations*, C# *Attributes*) could be used as a lightweight common language for all components. Does the domain really needs an IRepository ? Maybe its enough to send a Message containing the entity together with an action that has to be done (save, delete...). If a common language (DDD, http://martinfowler.com/bliki/UbiquitousLanguage.html, Quasar Blutgruppe 0 Software, "Bestimmt von garnichts" außer minimal verfügbare standard umgebung) could be find that is spoken by all components, types can annotate themself with the kind of *Abilities* they offer and what *Abilities* they need to operate properly. A runtime could *automagically* build up every needed dependencies. Further more the data flow of a program itself (most time method calls) could be "programmed" declarative and build up during runtime when an object is instantiated. 
+Components are subscribing for *Abilities* they need and/or are publishing *Abilities*. 
+An *Ability* may be everything a given language is supporting (value objects, classes, functions...). They can propagate data and/or functionality. Annotations (Java *Annotations*, C# *Attributes*) could be used as a lightweight common language for all components. Does the domain really needs an IRepository ? Maybe its enough to send a Message containing the entity together with an action that has to be done (save, delete...). If a common language (DDD, http://martinfowler.com/bliki/UbiquitousLanguage.html, Quasar Blutgruppe 0 Software, "Bestimmt von garnichts" außer minimal verfügbare standard umgebung) could be find that is spoken by all components, types can annotate themself with the kind of *Abilities* they offer and what *Abilities* they need to operate properly. A runtime could *automagically* build up every needed dependencies. Further more the data flow of a program itself (most time method calls) could be "programmed" declarative and build up during runtime when an object is instantiated. 
 Examples could be 
 
 Property, filed (used in ASP.NET web framework, JavaEE)
@@ -189,6 +221,7 @@ The aspects can simply be applied to the *Abilities (functions, class instances)
 [^wiki_implicit_invocation]:[Wikipedia Implicit invocation](http://en.wikipedia.org/wiki/Implicit_invocation)
 
 ------------
+###OO-Patterns vs. Functional programming
 
 OO-Patterns can be made easier using functions as first class objects.
 For example the *Observer pattern* is traditionally implemented using two interfaces *IPublisher* and *ISubscriber*. At least one of them has to know the other interface (Push or Pull based). *IPublisher<T>* has a function *Subscribe(ISubscriber<T>)* or *ISubscriber<T>* can have a function *SubscribeAt(IPublisher<T>)*. The *IPublisher* is calling each registered *ISubscriber´s* *OnUpdate* function when the publisher is receiving changes. Again most times both interfaces only declare one or two functions.
@@ -199,10 +232,13 @@ See also *IObservable/IObserver* in C# .Net.
 [^reactive_extensions]:[Rx (Reactive Extensions)](https://rx.codeplex.com/) *Reactive extensions*
 
 -----
+### Functional dependency injection
 
 Doing *Dependency injection* on functional level instead of on class level could become hard. Without additional contextual information (function names..) there may be multiple functions matching the same signature (during runtime).
 Creating new value types *Name<string>* instead simply using *string* and establishing them as a commong language *Dependency injection* on functional level could become much easier and practicable. 
-In theorie together with *Ability/Message passing* and *Declarative Programming* this could be used to automatically build up a running program simply from all components and their metainformation that are available during runtime.
+
+### Ability passing, Monads and Entelechies to "auto completion programming"
+In theorie together with *Ability/Message passing* and *Declarative Programming* this could be used to *automatically* (*Hollywood principe - "Dont call us, we call you"*) build up a running program from all components and their metainformation that are available during runtime.
 Monads (*Entelechie*  [^Entelechie] [^Entelechy] ) can wrap created instances and build up all connections and behaviours automatically. *Targets* like "With data X find a way to make Y out of it" could be given to the program. The *Entelechies* (auto completion monads) will start their work using all available meta information (Reflection, Annotations, "I want.. I have.."). They will find their way from function to function until they reach their goals. Using value types like *Name<string>* could greatly improve this process. Further they could automatically learn (all) possibillities available for them and constantly increasing them using function compositions and currying. 
 
 Maybe one day an *Entelechie* will find a possibility to automatically download github repositorys, build them and load them into the runtime :-D
@@ -216,7 +252,7 @@ At least a huge *Possibility graph* could be build up.
 --------------------------------
 Schichtenmodell nach Quasar http://www.vsek.org/servlet/is/26886/?print=true
 http://st.inf.tu-dresden.de/Lehre/WS06-07/st1/Vorlesungen/21b-quasar.pdf
-[1]:http://www.de.capgemini.com/resource-file-access/resource/pdf/quasar3.0.pdf "Quasar 3.0"
+
 http://www.qaware.de/download.php?artid=%7B972d1c79-ea13-815e-0e57-ece33fbead46%7D  (erklärt Blutgruppen kurz und gut)
 
 Layered vs Onion
