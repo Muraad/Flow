@@ -1,6 +1,6 @@
 ----------
 
-Abstract 0.1 
+Abstract 0.2 
 ===================
 
 ### Upcoming bachelor thesis
