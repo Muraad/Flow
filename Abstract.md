@@ -120,10 +120,10 @@ The executable component that knows all other components and fixes everything to
 Functional programming concepts can reduce the need for a mediator component between the domain and infrastructure components.  Maybe the *Serialize* function will simply take an instance (maybe generic or base type),  and is returning a boolean to indicate success or failure. The *Deserialize* function may take a Stream object as argument an will return a concrete instance.
 
 >The interface functions itself may take only standard runtime objects/types as 
->arguments. These can be understood from every component without the need for a >
+>arguments. These can be understood from every component without the need for a
 >mediator component that is translating.
 
-In programming lanugates where functions (lambdas) are first class objects like in .NET or now in Java 8, they can be used on all possible platforms/environments. If the runtime is not injecting an ISerialization but only a *Serialize* function there is no need for a mediator component.
+In programming lanugages where functions (lambdas) are first class objects like they are in .NET or now in Java 8, they can be used on all possible platforms/environments. If the runtime is not injecting an ISerialization but only a *Serialize* function there is no need for a mediator component.
 
 The executable component that is fixing everything together (bootstrapping) could take the mediators job using lambdas to create needed *Serialize* and *Deserialize*  functions and inject them where needed. 
 
