@@ -178,11 +178,11 @@ To use a concrete api a mediator component/library is introduces that is impleme
 
 <blockquote>
   <p>The interface functions itself may take only standard runtime objects/types as  <br>
-  arguments. These can be understood from every component without the need for a &gt; <br>
+  arguments. These can be understood from every component without the need for a <br>
   mediator component that is translating.</p>
 </blockquote>
 
-<p>In programming lanugates where functions (lambdas) are first class objects like in .NET or now in Java 8, they can be used on all possible platforms/environments. If the runtime is not injecting an ISerialization but only a <em>Serialize</em> function there is no need for a mediator component.</p>
+<p>In programming lanugages where functions (lambdas) are first class objects like they are in .NET or now in Java 8, they can be used on all possible platforms/environments. If the runtime is not injecting an ISerialization but only a <em>Serialize</em> function there is no need for a mediator component.</p>
 
 <p>The executable component that is fixing everything together (bootstrapping) could take the mediators job using lambdas to create needed <em>Serialize</em> and <em>Deserialize</em>  functions and inject them where needed. </p>
 
